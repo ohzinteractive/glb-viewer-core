@@ -1,0 +1,28 @@
+{
+  "name": "glb-viewer-core",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "vite build --watch",
+    "build": "vite build"
+  },
+  "author": "OHZI Interactive Studio",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ohzinteractive/glb-viewer-core"
+  },
+  "dependencies": {
+    "pit-js": "^4.1.1",
+    "three": "^0.176.0"
+  },
+  "devDependencies": {
+    "pug": "^3.0.3",
+    "sass": "1.77.5",
+    "standardx": "^7.0.0",
+    "stylelint": "^15.3.0",
+    "stylelint-config-standard-scss": "^7.0.1",
+    "stylelint-order": "^6.0.3",
+    "vite": "^6.3.5"
+  }
+}
