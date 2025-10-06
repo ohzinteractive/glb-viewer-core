@@ -4,8 +4,11 @@ html(lang="en")
     meta(charset="utf-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     // content-security-policy-replaced-on-extension-js
+
     title GLB Viewer WebView
-    link(rel="stylesheet" href="/webview/assets/css.css")
+
+    link(href='styles/style.scss', rel="stylesheet")
   body
-    include ./views/container.pug
-    script(type="module" src="/webview/assets/main.js")
+    include views/container.pug
+
+    script(type="module" src="js/main.js")

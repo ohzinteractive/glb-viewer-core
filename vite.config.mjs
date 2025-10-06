@@ -1,68 +1,78 @@
-import { defineConfig } from 'vite';
-import { renderPug } from './tasks/vite_plugins/render_pug.mjs';
-import { watchPugFiles } from './tasks/vite_plugins/watch_pug_files.mjs';
-
 import fs from 'fs';
 import path from 'path';
+import { defineConfig } from 'vite';
+import glsl from 'vite-plugin-glsl';
+import vitePugPlugin from 'vite-plugin-pug-transformer';
+import packagejson from './package.json';
 
-function copyPublic() {
-  return {
-    name: 'copy-public',
-    apply: 'build',
-    writeBundle: () => {
-      fs.cpSync('public', '../public/webview', { recursive: true });
-      console.log('Copied public to dist');
-      return true;
-    },
-  };
-}
+const useHttps = process.env.VITE_USE_HTTPS === 'true';
 
 export default defineConfig({
-  root: 'src/webview',
-  build: {
-    outDir: '../../../public/webview',
-    emptyOutDir: true,
-    chunkSizeWarningLimit: 700,
-    minify: 'esbuild',
-    esbuild: {
-      drop: ['console', 'debugger'],
-      treeShaking: true
-    },
-    rollupOptions: {
-      input: {
-        html: path.resolve(__dirname, 'src/webview/index.html'),
-        main: path.resolve(__dirname, 'src/webview/js/main.js'),
-        css: path.resolve(__dirname, 'src/webview/styles/style.scss'),
-      },
-      output: {
-        entryFileNames: 'assets/[name].js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]',
-        manualChunks: {
-          'three': ['three'],
-          'three-addons': [
-            'three/examples/jsm/Addons.js',
-            'three/examples/jsm/controls/OrbitControls',
-            'three/examples/jsm/loaders/DRACOLoader',
-            'three/examples/jsm/loaders/GLTFLoader'
-          ],
-          'pit-js': ['pit-js']
+  root: 'src',
+  base: '/webview/',
+  plugins: [
+    glsl(),
+    vitePugPlugin({ pugLocals: {
+          package: packagejson
         }
+    }),
+    {
+      name: "ohzi-static-files-dont-exist",
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          const url = req.url || '';
+          const extensions = ['mp3', 'mp4', 'webm', 'glb', 'jpg', 'png', 'webp', 'hdr', 'json', 'gltf', 'xml', 'json']
+          
+          // Check if the url contains a dot (.) which means it's probably a static file request
+          if (url.includes('.') && extensions.includes(url.split('.').pop())) {
+            const filePath = path.join(process.cwd(), 'public', url);
+            
+            // Check if the file exists in the public directory
+            if (!fs.existsSync(filePath)) {
+              res.statusCode = 404;
+              return;
+            }
+          } 
+          next(); // Continue to the next middleware if the file exists
+        })
       }
     }
-  },
-  plugins: [
-    watchPugFiles(),
-    renderPug(),
-    copyPublic()
+    // watch({
+    //   pattern: "./core/**/*.js",
+    //   command: "cd core && yarn build",
+    // }),
   ],
-  css: {
-    preprocessorOptions: {
-      scss: {}
+  build: {
+    outDir: '../../public/webview',
+    emptyOutDir: true,
+    target: 'esnext', // browsers can handle the latest ES features
+    rollupOptions: {
+      input: ['src/index.html'],
+      output: {
+        manualChunks: {
+          // 'ohzi-core': ['ohzi-core'],
+          three: ['three']
+        }
+      },
+    },
+    chunkSizeWarningLimit: 700
+  },
+  resolve: {
+    alias: {
+      // 'ohzi-components': path.resolve(__dirname, './components/src'),
+      // 'ohzi-core': path.resolve(__dirname, './core/src'),
+      // 'pit-js': path.resolve(__dirname, './pit/src'),
+      // 'three': path.resolve(__dirname, './node_modules/three')
     }
   },
-  base: './',
-  optimizeDeps: {
-    include: ['three']
-  }
-});
+  server: {
+    https: useHttps
+      ? {
+        key: fs.readFileSync(path.resolve(__dirname, 'certificates', 'localhost-key.pem')),
+        cert: fs.readFileSync(path.resolve(__dirname, 'certificates', 'localhost.pem'))
+      }
+      : false,
+    host: true // allows external access
+  },
+  envPrefix: 'OHZI'
+})

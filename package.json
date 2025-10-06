@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "vite build --watch",
-    "build": "vite build"
+    "start": "node tasks/remove_cache.mjs && node tasks/start_app.mjs false",
+    "start-vite": "vite --port 1235",
+    "build": "node tasks/remove_cache.mjs && node tasks/build_app.mjs && yarn copy-public",
+    "build-vite": "vite build",
+    "copy-public": "node tasks/copy_folder.mjs public ../public/webview"
   },
   "author": "OHZI Interactive Studio",
   "license": "MIT",
