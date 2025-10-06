@@ -10,6 +10,21 @@ class MainApplication
     this.ui_controller = new UIController(this);
     this.scene_controller = new SceneController(this);
 
+    if (typeof acquireVsCodeApi === 'undefined')
+    {
+      // Fallback for testing
+      window.acquireVsCodeApi = () =>
+      {
+        return {
+          postMessage: (message) =>
+          {
+            console.log('Post message (fallback):', message);
+            parent.postMessage(message, '*');
+          }
+        };
+      };
+    }
+
     VSCodeContext.ctx = acquireVsCodeApi();
   }
 
