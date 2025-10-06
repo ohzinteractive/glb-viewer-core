@@ -31,8 +31,8 @@ class MainApplication
       case 'loadModelFromBase64':
         this.scene_controller.loadModelFromBase64(message.data);
         break;
-      case 'setRootPath':
-        this.scene_controller.setLibURIs(message.root_path);
+      case 'setWebViewPath':
+        this.scene_controller.setLibURIs(message.webview_path);
         break;
       }
     });

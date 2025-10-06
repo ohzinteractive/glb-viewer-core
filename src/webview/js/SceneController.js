@@ -42,7 +42,6 @@ class SceneController
 {
   constructor(mainapp)
   {
-    this.root_path = '';
     this.mainapp = mainapp;
     // console.log(REVISION);
 
@@ -149,20 +148,18 @@ class SceneController
     // })));
   }
 
-  setLibURIs(root_path)
+  setLibURIs(webview_path)
   {
-    console.log('Setting Root URI:', root_path);
+    console.log('Setting WebView URI:', webview_path);
 
-    this.draco_loader.setDecoderPath(`${root_path}/dist/webview/lib/draco/`);
-    this.ktx2_loader.setTranscoderPath(`${root_path}/dist/webview/lib/basis/`);
+    this.draco_loader.setDecoderPath(`${webview_path}/lib/draco/`);
+    this.ktx2_loader.setTranscoderPath(`${webview_path}/lib/basis/`);
 
     this.ktx2_loader.detectSupport(this.renderer.renderer);
 
     this.loader.setDRACOLoader(this.draco_loader);
     this.loader.setKTX2Loader(this.ktx2_loader);
     this.loader.setMeshoptDecoder(this.meshopt_decoder);
-
-    this.root_path = root_path;
   }
 
   loadModelFromBase64(base64)

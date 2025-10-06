@@ -10,7 +10,7 @@ function copyPublic() {
     name: 'copy-public',
     apply: 'build',
     writeBundle: () => {
-      fs.cpSync('public', '../dist/webview', { recursive: true });
+      fs.cpSync('public', '../public/webview', { recursive: true });
       console.log('Copied public to dist');
       return true;
     },
@@ -20,7 +20,7 @@ function copyPublic() {
 export default defineConfig({
   root: 'src/webview',
   build: {
-    outDir: '../../../dist/webview',
+    outDir: '../../../public/webview',
     emptyOutDir: true,
     chunkSizeWarningLimit: 700,
     minify: 'esbuild',
