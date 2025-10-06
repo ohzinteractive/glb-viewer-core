@@ -167,7 +167,7 @@ class Info extends ResizableWindow
   open_as_json()
   {
     VSCodeContext.ctx.postMessage({
-      command: 'openJson',
+      type: 'openJson',
       payload: this.scene_controller.gltf.parser.json
     });
   }
@@ -175,7 +175,7 @@ class Info extends ResizableWindow
   open_as_text()
   {
     VSCodeContext.ctx.postMessage({
-      command: 'openAsText'
+      type: 'openAsText'
     });
   }
 

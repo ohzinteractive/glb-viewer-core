@@ -138,7 +138,7 @@ class MaterialDetails extends ResizableWindow
   handle_inspect_json_button_click()
   {
     VSCodeContext.ctx.postMessage({
-      command: 'openJson',
+      type: 'openJson',
       payload: this.material.toJSON()
     });
   }

@@ -242,7 +242,7 @@ class GeometryItem
   handle_inspect_json_button_click()
   {
     VSCodeContext.ctx.postMessage({
-      command: 'openJson',
+      type: 'openJson',
       payload: this.geometry.toJSON()
     });
 
