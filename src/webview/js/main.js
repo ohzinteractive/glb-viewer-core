@@ -44,6 +44,7 @@ class MainApplication
         this.scene_controller.loadModelFromUri(message.dataUri);
         break;
       case 'loadModelFromBase64':
+        this.ui_controller.panel.contents.info.update_extension(message.extension);
         this.scene_controller.loadModelFromBase64(message.data);
         break;
       case 'setWebViewPath':
