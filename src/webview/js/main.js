@@ -1,5 +1,5 @@
 import { SceneController } from './SceneController';
-import { UIController } from './UiController';
+import { UIController } from './UIController';
 import { VSCodeContext } from './VSCodeContext';
 
 /* global acquireVsCodeApi */
