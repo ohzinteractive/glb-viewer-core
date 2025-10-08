@@ -3,14 +3,14 @@ $monaspace-font: 'MonaspaceNeon';
 
 @font-face{
   font-family: $monaspace-font;
-  src: url('/webview/fonts/monaspace_neon/MonaspaceNeonNF-Regular.woff2') format('woff2');
+  src: url('/fonts/monaspace_neon/MonaspaceNeonNF-Regular.woff2') format('woff2');
 
   font-weight: 400;
   font-display: swap;
 }
 @font-face{
   font-family: $monaspace-font;
-  src: url('/webview/fonts/monaspace_neon/MonaspaceNeonNF-Medium.woff2') format('woff2');
+  src: url('/fonts/monaspace_neon/MonaspaceNeonNF-Medium.woff2') format('woff2');
 
   font-weight: 500;
   font-display: swap;
@@ -18,7 +18,7 @@ $monaspace-font: 'MonaspaceNeon';
 
 @font-face{
   font-family: $monaspace-font;
-  src: url('/webview/fonts/monaspace_neon/MonaspaceNeonNF-Bold.woff2') format('woff2');
+  src: url('/fonts/monaspace_neon/MonaspaceNeonNF-Bold.woff2') format('woff2');
 
   font-weight: 600;
   font-display: swap;
