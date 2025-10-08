@@ -21,6 +21,8 @@ body, html {
   width: 100vw; height: 100vh;
   overflow: hidden;
 
+  font-family: $monaspace-font;
+
   scrollbar-color: var(--background-color-alt) var(--background-color);
   scrollbar-width: thin;
 }
@@ -50,4 +52,6 @@ div.hidden {
 div.button {
   cursor: pointer;
   @include user-select(none);
+
+  font-size: 12 * $ptr;
 }

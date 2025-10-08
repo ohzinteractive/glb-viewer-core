@@ -24,6 +24,10 @@
     }
   }
 
+  .materials-header__title {
+    font-size: 14 * $ptr;
+  }
+
   .materials-header__close {
     svg {
       width: 16 * $ptr;

@@ -42,6 +42,10 @@
     overflow-x: hidden;
   }
 
+  .geometries-header__title {
+    font-size: 14 * $ptr;
+  }
+
   .geometries-header__close {
     svg {
       width: 16 * $ptr;

@@ -1,5 +1,7 @@
 .animations {
     min-width: 250 * $ptr;
+
+    font-size: 12 * $ptr;
 }
 
 .animations__list {
@@ -28,8 +30,6 @@
     padding: 5 * $ptr 10 * $ptr;
 
     min-width: 0;
-
-    font-family: monospace;
 
     border-radius: $border-radius;
     user-select: none;
@@ -105,6 +105,10 @@
         height: 16 * $ptr;
     }
 }
+
+  .animations-header__title {
+    font-size: 14 * $ptr;
+  }
 
   .animations-header__close {
     svg {

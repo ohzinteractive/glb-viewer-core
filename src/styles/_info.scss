@@ -14,8 +14,6 @@
 
     padding: 5 * $ptr 10 * $ptr;
 
-    font-family: monospace;
-
     border-radius: $border-radius;
     user-select: none;
   }
@@ -31,6 +29,10 @@
 
     text-overflow: ellipsis;
     overflow: hidden;
+  }
+
+  .info-node__value {
+    font-size: 12 * $ptr;
   }
 
   .info-node__material-name {
@@ -52,6 +54,10 @@
     color: var(--text-color-alt);
 
     font-size: 12 * $ptr;
+  }
+
+  .info-header__title {
+    font-size: 14 * $ptr;
   }
 
   .info-header__close {
