@@ -11,6 +11,10 @@
   box-sizing: border-box;
 }
 
+  .material-details__header-title {
+    font-size: 12 * $ptr;
+  }
+
   .material-details__header-message {
     transition: opacity 0.3s ease-in-out;
   }

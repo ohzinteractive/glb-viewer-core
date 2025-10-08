@@ -106,6 +106,10 @@
     }
   }
 
+  .textures-header__title {
+    font-size: 14 * $ptr;
+  }
+
   .textures-header__close {
     svg {
       width: 16 * $ptr;
