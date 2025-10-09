@@ -19,7 +19,6 @@ By maintaining a single source of truth for the viewer logic, both implementatio
 ### 🎨 Material Inspection
 - View and inspect all materials in your GLB model
 - Detailed material properties and parameters
-- PBR material property visualization
 
 ### 🖼️ Texture Viewer
 - Preview all textures embedded in your model
@@ -33,7 +32,6 @@ By maintaining a single source of truth for the viewer logic, both implementatio
 
 ### 🎬 Animation Controls
 - Play, pause, and scrub through animations
-- Timeline controls with precise frame navigation
 - Support for multiple animation tracks
 
 ### 🌳 Scene Hierarchy
