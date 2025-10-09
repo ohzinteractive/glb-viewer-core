@@ -1,6 +1,9 @@
-# glb-viewer-core
+# GLB Viewer Core
 
 A shared core library for viewing and inspecting GLB/GLTF 3D models, used by both a standalone web viewer and a VS Code extension.
+
+![Preview](https://github.com/ohzinteractive/glb-viewer-vscode/blob/main/previews/preview-2.10.0.png?raw=true)
+
 
 ## Overview
 
@@ -107,7 +110,7 @@ Both implementations share the same codebase but may have platform-specific inte
 
 ## License
 
-[Licence](LICENSE.md)
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Author
 [![OHZI Interactive Studio](https://raw.githubusercontent.com/ohzinteractive/legendary-parakeet/edda06cd1dab6a283aff73834ce8ac06787ea117/app/assets/images/common/logo.svg?token=ABVOKZLQABBTLTQEHKOOAT3I432HC) - OHZI Interactive Studio](https://ohzi.io?utm_source=vscode)
