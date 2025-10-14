@@ -87,6 +87,7 @@ class Info extends ResizableWindow
     const instanced_vertices = this.instanced_vertex_count(this.scene_controller.model);
     this.$content.innerHTML = '';
 
+    this.create_node('file-size', 'File size', this.format_file_size(this.scene_controller.file_size));
     this.create_node('drawcalls', 'Drawcalls',   this.scene_controller.scene_drawcall_count);
     this.create_node('geometries', 'Geometries', gltf.parser.json.meshes?.length || 0);
     this.create_node('textures', 'Textures',     gltf.parser.json.textures?.length || 0);
@@ -183,6 +184,28 @@ class Info extends ResizableWindow
   {
     this.extension = uri.split('.').pop();
     this.$inspect_button.children[0].textContent = this.extension === 'gltf' ? 'Open as Text' : 'Open as JSON';
+  }
+
+  format_file_size(bytes)
+  {
+    if (!bytes || bytes === 0) return 'Unknown';
+
+    const units = ['B', 'KB', 'MB', 'GB'];
+    let size = bytes;
+    let unitIndex = 0;
+
+    // Use 1000 (decimal) instead of 1024 (binary) to match macOS Finder
+    while (size >= 1000 && unitIndex < units.length - 1)
+    {
+      size /= 1000;
+      unitIndex++;
+    }
+
+    // Format with appropriate decimal places
+    const formatted = unitIndex === 0 ? size.toString() : size.toFixed(2);
+    const dot_separated = bytes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return `${dot_separated} bytes (${formatted} ${units[unitIndex]})`;
+    // return `${dot_separated} bytes`;
   }
 }
 

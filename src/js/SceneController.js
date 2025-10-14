@@ -53,6 +53,7 @@ class SceneController
     this.normal_helpers = [];
     this.tangent_helpers = [];
     this.line_length = 1;
+    this.file_size = 0;
 
     const dom_container = document.querySelector('.viewer');
     this.renderer = new Renderer(dom_container);
@@ -162,8 +163,9 @@ class SceneController
     this.loader.setMeshoptDecoder(this.meshopt_decoder);
   }
 
-  loadModelFromBase64(base64)
+  loadModelFromBase64(base64, fileSize)
   {
+    this.file_size = fileSize || 0;
     const binary = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
     // Feed this into GLTFLoader instead of fetch()
     this.loader.parse(binary.buffer, '', (gltf) =>
@@ -172,7 +174,7 @@ class SceneController
     }, console.error);
   }
 
-  loadModelFromUri(dataUri)
+  loadModelFromUri(dataUri, fileSize)
   {
     if (!dataUri)
     {
@@ -181,6 +183,7 @@ class SceneController
     }
     console.log('Loading model from data URI:', dataUri);
 
+    this.file_size = fileSize || 0;
     this.loader.load(dataUri, (gltf) =>
     {
       this.on_model_loaded(gltf);

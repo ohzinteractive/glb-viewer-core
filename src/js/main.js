@@ -41,11 +41,11 @@ class MainApplication
       {
       case 'loadModelFromUri':
         this.ui_controller.panel.contents.info.update_extension(message.dataUri);
-        this.scene_controller.loadModelFromUri(message.dataUri);
+        this.scene_controller.loadModelFromUri(message.dataUri, message.fileSize);
         break;
       case 'loadModelFromBase64':
         this.ui_controller.panel.contents.info.update_extension(message.extension);
-        this.scene_controller.loadModelFromBase64(message.data);
+        this.scene_controller.loadModelFromBase64(message.data, message.fileSize);
         break;
       case 'setWebViewPath':
         this.scene_controller.setLibURIs(message.webview_path);
