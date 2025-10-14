@@ -181,9 +181,36 @@ class Textures extends ResizableWindow
 
   async get_image_bitmap(texture, full_size = false)
   {
-    if (texture.source)
+    // Check if texture.source.data is a valid drawable image type
+    if (texture.source && texture.source.data)
     {
-      return texture.source.data;
+      const data = texture.source.data;
+      // Check if it's already a valid drawable type
+      if (data instanceof ImageBitmap ||
+          data instanceof HTMLImageElement ||
+          data instanceof HTMLCanvasElement ||
+          data instanceof HTMLVideoElement ||
+          data instanceof OffscreenCanvas)
+      {
+        // If it's already an ImageBitmap and full_size is requested or size matches, return it
+        if (data instanceof ImageBitmap)
+        {
+          if (full_size || (data.width <= 512 && data.height <= 512))
+          {
+            return data;
+          }
+        }
+        else if (full_size)
+        {
+          // For other image types, convert to ImageBitmap if full_size
+          return await createImageBitmap(data);
+        }
+        else if (data.width <= 512 && data.height <= 512)
+        {
+          // If size is already small enough, convert to ImageBitmap
+          return await createImageBitmap(data);
+        }
+      }
     }
 
     const width = full_size ? texture.image.width : Math.min(texture.image.width || 512, 512);
