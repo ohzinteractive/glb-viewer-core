@@ -345,12 +345,21 @@ class Textures extends ResizableWindow
     let extension = 'png';
     if (name.split('.').length > 1)
     {
-      extension = name.split('.').pop();
+      const original_extension = name.split('.').pop();
+      name = name.replace(`.${original_extension}`, '');
+      if (
+        original_extension === 'png' ||
+        original_extension === 'jpg' ||
+        original_extension === 'jpeg' ||
+        original_extension === 'webp')
+      {
+        extension = original_extension;
+      }
     }
-    name = name.replace(`.${extension}`, '');
     const data_url = this.image_bitmap_to_data_url(bitmap);
     const a = document.createElement('a');
     a.href = data_url;
+    console.log('download image', `${name} (${bitmap.width}x${bitmap.height}).${extension}`);
     a.download = `${name} (${bitmap.width}x${bitmap.height}).${extension}`;
     a.click();
   }
