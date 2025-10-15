@@ -176,14 +176,14 @@ class Info extends ResizableWindow
   open_as_text()
   {
     VSCodeContext.ctx.postMessage({
-      type: 'openAsText'
+      type: 'openAsText',
+      payload: this.scene_controller.gltf.parser.json
     });
   }
 
   update_extension(uri)
   {
     this.extension = uri.split('.').pop();
-    this.$inspect_button.children[0].textContent = this.extension === 'gltf' ? 'Open as Text' : 'Open as JSON';
   }
 
   format_file_size(bytes)
