@@ -14,12 +14,43 @@ class Details extends ResizableWindow
     this.$header = $headers;
     this.ui_controller = ui_controller;
 
-    this.vscode_configuration = null;
+    this.original_configuration = null;
+
+    this.all_object_keys = [
+      'name',
+      'type',
+      'position',
+      'rotation',
+      'scale',
+      'visible',
+      'castShadow',
+      'receiveShadow',
+      'userData',
+      'layers',
+      'matrix',
+      'matrixWorld',
+      'up',
+      'children',
+      'parent',
+      'frustumCulled',
+      'globalScale',
+      'globalPosition'
+    ];
+    this.relevant_object_keys = null;
+    this.prettify_property_labels = null;
+
     this.current_object = null;
 
     this.$header_message = document.querySelector('.details__header-message');
     this.$header_title = document.querySelector('.details__header-title');
-    this.$close = document.querySelector('.details__close');
+    this.$close = document.querySelector('.details__close-button');
+
+    this.$open_settings = document.querySelector('.details__open-settings-icon');
+    this.$close_settings = document.querySelector('.details__close-settings-icon');
+
+    this.$settings = document.querySelector('.details__settings-container');
+    this.$settings_list = document.querySelector('.details__settings-list');
+    this.$settings_close_button = document.querySelector('.details__settings-close-button');
   }
 
   init()
@@ -30,14 +61,18 @@ class Details extends ResizableWindow
 
       if (message.type === 'updateConfig')
       {
-        this.vscode_configuration = message.config;
+        this.original_configuration = JSON.parse(JSON.stringify(message.config));
+        this.relevant_object_keys = JSON.parse(JSON.stringify(message.config.relevant3dObjectKeys));
+        this.prettify_property_labels = JSON.parse(JSON.stringify(message.config.prettifyPropertyLabels));
+        this.fill_settings_list();
       }
     });
 
-    this.$close.addEventListener('click', () =>
-    {
-      this.reset_details();
-    });
+    this.$close.addEventListener('click', this.reset_details.bind(this));
+
+    this.$open_settings.addEventListener('click', this.toggle_settings.bind(this));
+    this.$close_settings.addEventListener('click', this.toggle_settings.bind(this));
+    this.$settings_close_button.addEventListener('click', this.toggle_settings.bind(this));
   }
 
   reset_details()
@@ -75,16 +110,12 @@ class Details extends ResizableWindow
   {
     const details = [];
     const ICON_SVG = '<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M4 2h11v2H6v13H4V2zm4 4h12v16H8V6zm2 2v12h8V8h-8z" fill="currentColor"/> </svg>';
-    const relevant_keys = this.vscode_configuration.relevant3dObjectKeys;
+    const relevant_keys = this.relevant_object_keys;
     for (let i = 0; i < relevant_keys.length; i++)
     {
       const key = relevant_keys[i];
 
-      if (obj[key] === undefined)
-      {
-        continue;
-      }
-      let value = obj[key];
+      let value = obj[key] || 'undefined';
       if (value && typeof value === 'object')
       {
         switch (true)
@@ -122,6 +153,7 @@ class Details extends ResizableWindow
       $new_details_item.appendChild($item_content);
 
       $item_label.textContent   = this.prettify_name(key) + ': ';
+      $item_label.title = key;
       $item_content.textContent = value;
 
       if (key === 'type' && obj.isInstancedMesh)
@@ -217,7 +249,7 @@ class Details extends ResizableWindow
 
   prettify_name(name)
   {
-    if (this.vscode_configuration.prettifyPropertyLabels)
+    if (this.prettify_property_labels)
     {
       const spaced = name.replace(/([A-Z])/g, ' $1').toLowerCase();
       return spaced.charAt(0).toUpperCase() + spaced.slice(1);
@@ -243,6 +275,100 @@ class Details extends ResizableWindow
       return 'Mesh';
     }
     return obj.type;
+  }
+
+  toggle_settings()
+  {
+    if (this.$settings.classList.contains('hidden'))
+    {
+      this.$settings.classList.remove('hidden');
+      this.$open_settings.classList.add('hidden');
+      this.$close_settings.classList.remove('hidden');
+    }
+    else
+    {
+      this.$settings.classList.add('hidden');
+      this.$open_settings.classList.remove('hidden');
+      this.$close_settings.classList.add('hidden');
+    }
+  }
+
+  fill_settings_list()
+  {
+    this.$settings_list.innerHTML = '';
+    for (let i = 0; i < this.all_object_keys.length; i++)
+    {
+      const key = this.all_object_keys[i];
+      const $setting_item = document.createElement('div');
+      $setting_item.dataset.settingKey = key;
+      $setting_item.classList.add('details__settings-item');
+      $setting_item.textContent = this.prettify_name(key);
+
+      const $eye_icon = document.createElement('div');
+      $eye_icon.classList.add('details__settings-icon', 'details__settings-eye-icon', 'hidden');
+      $eye_icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>';
+
+      const $closed_eye_icon = document.createElement('div');
+      $closed_eye_icon.classList.add('details__settings-icon', 'details__settings-closed-eye-icon', 'hidden');
+      $closed_eye_icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-.722-3.25"/><path d="M2 8a10.645 10.645 0 0 0 20 0"/><path d="m20 15-1.726-2.05"/><path d="m4 15 1.726-2.05"/><path d="m9 18 .722-3.25"/></svg>';
+
+      $setting_item.appendChild($eye_icon);
+      $setting_item.appendChild($closed_eye_icon);
+      $setting_item.addEventListener('click', this.toggle_setting.bind(this, $setting_item));
+
+      if (this.relevant_object_keys.includes(key))
+      {
+        $eye_icon.classList.remove('hidden');
+      }
+      else
+      {
+        $closed_eye_icon.classList.remove('hidden');
+        $setting_item.classList.add('not-relevant');
+      }
+
+      this.$settings_list.appendChild($setting_item);
+    }
+  }
+
+  show_setting($setting_item)
+  {
+    this.relevant_object_keys.push($setting_item.dataset.settingKey);
+
+    this.show_object_details();
+    $setting_item.classList.remove('not-relevant');
+
+    const eye_icon = $setting_item.querySelector('.details__settings-eye-icon');
+    const closed_eye_icon = $setting_item.querySelector('.details__settings-closed-eye-icon');
+
+    eye_icon.classList.remove('hidden');
+    closed_eye_icon.classList.add('hidden');
+  }
+
+  hide_setting($setting_item)
+  {
+    const index = this.relevant_object_keys.indexOf($setting_item.dataset.settingKey);
+    this.relevant_object_keys.splice(index, 1);
+    this.show_object_details();
+
+    const eye_icon = $setting_item.querySelector('.details__settings-eye-icon');
+    const closed_eye_icon = $setting_item.querySelector('.details__settings-closed-eye-icon');
+
+    eye_icon.classList.add('hidden');
+    closed_eye_icon.classList.remove('hidden');
+
+    $setting_item.classList.add('not-relevant');
+  }
+
+  toggle_setting($setting_item)
+  {
+    if (this.relevant_object_keys.includes($setting_item.dataset.settingKey))
+    {
+      this.hide_setting($setting_item);
+    }
+    else
+    {
+      this.show_setting($setting_item);
+    }
   }
 }
 
