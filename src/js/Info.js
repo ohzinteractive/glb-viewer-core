@@ -30,6 +30,18 @@ class Info extends ResizableWindow
   init(scene_controller)
   {
     this.scene_controller = scene_controller;
+
+    // Listen for messages from the extension
+    window.addEventListener('message', event =>
+    {
+      const message = event.data;
+      switch (message.type)
+      {
+      case 'showOpenOnBlenderButton':
+        this.$open_on_blender_button.classList.remove('hidden');
+        break;
+      }
+    });
   }
 
   show()
