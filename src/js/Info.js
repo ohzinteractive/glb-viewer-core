@@ -21,6 +21,9 @@ class Info extends ResizableWindow
     this.$close_button.addEventListener('click', this.handle_close_button_click.bind(this));
     this.$inspect_button = this.$container.querySelector('.info-button__inspect-json');
     this.$inspect_button.addEventListener('click', this.handle_inspect_button_click.bind(this));
+    this.$open_on_blender_button = this.$container.querySelector('.info-button__open-on-blender');
+    this.$open_on_blender_button.addEventListener('click', this.handle_open_on_blender_button_click.bind(this));
+
     this.extension = '';
   }
 
@@ -163,6 +166,13 @@ class Info extends ResizableWindow
     {
       this.open_as_json();
     }
+  }
+
+  handle_open_on_blender_button_click()
+  {
+    VSCodeContext.ctx.postMessage({
+      type: 'openInBlender'
+    });
   }
 
   open_as_json()

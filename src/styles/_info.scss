@@ -60,18 +60,18 @@
     font-size: 14 * $ptr;
   }
 
-  .info-header__close {
-    svg {
-      width: 16 * $ptr;
-      height: 16 * $ptr;
+  .info-buttons
+  {
+    display: flex;
 
-      &:hover {
-        transform: scale(1.1);
-      }
-    }
+    gap: 8 * $ptr;
+
+    justify-content: center;
+
   }
 
-  .info-button__inspect-json {
+  .info-button__inspect-json,
+  .info-button__open-on-blender {
     display: flex;
 
     flex-direction: row;
@@ -99,5 +99,16 @@
     svg {
       width: 16 * $ptr;
       height: 16 * $ptr;
+    }
+  }
+
+  .info-header__close {
+    svg {
+      width: 16 * $ptr;
+      height: 16 * $ptr;
+
+      &:hover {
+        transform: scale(1.1);
+      }
     }
   }
